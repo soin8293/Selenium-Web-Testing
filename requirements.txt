@@ -1,2 +1,3 @@
 selenium>=4.20
 webdriver-manager>=4.0
+imageio>=2.34
