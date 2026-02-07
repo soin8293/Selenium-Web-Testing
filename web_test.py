@@ -70,6 +70,9 @@ class BaseTest(unittest.TestCase):
 
         if os.getenv("CI"):  # headless on GitHub Actions
             opts.add_argument("--headless=new")
+            opts.add_argument("--no-sandbox")
+            opts.add_argument("--disable-dev-shm-usage")
+            opts.add_argument("--window-size=1280,800")
 
         self.driver = webdriver.Chrome(
             service=webdriver.chrome.service.Service(ChromeDriverManager().install()),
@@ -173,4 +176,3 @@ if __name__ == "__main__":
         try: p.unlink()
         except FileNotFoundError:
             pass
-
