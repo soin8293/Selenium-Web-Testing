@@ -19,5 +19,8 @@ jobs:
         if: always()
         with:
           name: run-artifacts
-          path: screenshots/*.png
+          path: |
+            screenshots/*.png
+            demo.gif
+          if-no-files-found: warn
     continue-on-error: false

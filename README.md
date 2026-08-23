@@ -1,96 +1,81 @@
-# :test_tube: Selenium Web Testing � SauceDemo
+# Selenium Web Testing — SauceDemo
 
 [![CI](https://github.com/soin8293/Selenium-Web-Testing/actions/workflows/ci.yml/badge.svg)](https://github.com/soin8293/Selenium-Web-Testing/actions)
 [![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/soin8293/Selenium-Web-Testing?quickstart=1)
-![Python](https://img.shields.io/badge/python-3.12%2B-blue)
+![Python](https://img.shields.io/badge/Python-3.12%2B-blue)
 ![Selenium](https://img.shields.io/badge/Selenium-4.x-green)
 
-Automated functional tests written in **Python 3.12** with **Selenium 4** against the live e-commerce sandbox <https://www.saucedemo.com>.
+An educational Python/Selenium project that turns two checkout requirements
+into repeatable browser tests against the public
+[SauceDemo](https://www.saucedemo.com/) sandbox.
 
----
+## What this demonstrates
 
-## :camera_flash: Demo
+- Translating positive and negative user flows into executable checks
+- Reusable browser setup and checkout helpers
+- Explicit waits instead of fixed timing for page-state assertions
+- Headless Chrome execution in GitHub Actions
+- Screenshot artifacts and a small run GIF for review
+- A process exit code that fails CI when any unittest fails
 
-![Demo](demo.gif)
+## Test scenarios
 
-*(The GIF is rebuilt on every run from fresh screenshots.)*
+| Flow | Steps | Expected result |
+|---|---|---|
+| Positive checkout | Sign in, add two items, provide checkout details, finish | Order-completion heading appears |
+| Missing first name | Sign in, add one item, omit the first name | Validation banner mentions the missing first name |
 
----
+## Demo
 
-## :toolbox: Tech Stack
+![Two-flow test demonstration](demo.gif)
 
-| Tool / Library        | Purpose                                   |
-| --------------------- | ----------------------------------------- |
-| **Selenium 4**        | Browser automation                        |
-| **WebDriver Manager** | Auto-installs the matching ChromeDriver   |
-| **ImageIO**           | Builds `demo.gif` from screenshots        |
-| **GitHub Actions**    | CI workflow (headless Chrome)             |
+## Run locally
 
----
+Requirements:
 
-## :white_check_mark: Test Scenarios
-
-| Flow           | Steps (high-level)                                           | Expected Result            |
-| -------------- | ------------------------------------------------------------ | -------------------------- |
-| **Positive ?** | Log in ? add 2 items ? checkout ? finish                    | �Thank you for your order� |
-| **Negative ?** | Log in ? add 1 item ? leave **First Name** blank ? checkout | Validation error banner    |
-
-Each flow ends with a PNG screenshot saved to **`screenshots/`**.
-
----
-
-## :rocket: Quick Start
+- Python 3.12+
+- Google Chrome
+- Internet access to the third-party SauceDemo sandbox
 
 ```bash
 git clone https://github.com/soin8293/Selenium-Web-Testing.git
 cd Selenium-Web-Testing
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 python web_test.py
 ```
 
-* Screenshots appear in `screenshots/`.  
-* A new **`demo.gif`** is generated automatically.  
-* Chrome password-manager pop-ups are disabled via Incognito + feature flags.
+Screenshots are written under `screenshots/` while the suite runs. Local runs
+combine successful screenshots into `demo.gif` and remove the intermediate
+PNGs. CI retains both the screenshots and GIF as workflow artifacts.
 
----
+## Continuous integration
 
-## :test_tube: Continuous Integration
+`.github/workflows/ci.yml` runs the two flows in headless Chrome on each push
+and pull request. The command exits nonzero if either unittest fails, so the CI
+badge represents the browser assertions rather than only script completion.
 
-`.github/workflows/ci.yml` runs on every push:
+## Project structure
 
-1. Install dependencies  
-2. Launch headless Chrome  
-3. Execute both tests  
-4. Upload screenshots as an artifact  
-
-The green **CI** badge at the top reflects the latest status.
-
----
-
-## :file_folder: Project Structure
-
-```
-Selenium-Web-Testing/
-+- web_test.py          # Selenium tests (unittest)
-+- requirements.txt     # Dependencies
-+- README.md            # This file
-+- demo.gif             # Auto-generated test run
-+- screenshots/         # Saved PNGs
-+- .github/workflows/   # GitHub Actions CI
+```text
+.
+├── .github/workflows/ci.yml
+├── demo.gif
+├── requirements.txt
+├── screenshots/
+└── web_test.py
 ```
 
----
+## Scope and limitations
 
-## :computer: Requirements
+This is a bounded educational functional-test project, not production QA,
+security testing, accessibility testing, performance testing, or a Sauce Labs
+project. It depends on a public third-party sandbox, so upstream UI or account
+changes can break selectors or credentials without a change to this repository.
 
-* Google Chrome  
-* Python 3.12+  
-* Internet access (tests hit SauceDemo live site)  
+## Author
 
-_No manual ChromeDriver download required�`webdriver-manager` handles it._
+Sorbarikor Inene — [@soin8293](https://github.com/soin8293)
 
----
+## License
 
-## :book: License
-
-MIT License � free to use, modify, and share.
+MIT. See [`LICENSE`](LICENSE).

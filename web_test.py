@@ -44,7 +44,7 @@ def snap(driver: webdriver.Chrome, label: str) -> None:
     fname = SHOT_DIR / f"{label}_{ts()}.png"
     driver.save_screenshot(str(fname))
     CURRENT_SHOTS.append(fname)
-    print(f"[✓] Screenshot saved → {fname}")
+    print(f"[PASS] Screenshot saved: {fname}")
 
 
 # ---------------- base fixture ------------------------------------------- #
@@ -82,7 +82,9 @@ class BaseTest(unittest.TestCase):
         self.wait = WebDriverWait(self.driver, 10)
 
     def tearDown(self):
-        self.driver.quit()
+        driver = getattr(self, "driver", None)
+        if driver:
+            driver.quit()
 
     # ------------ reusable steps ---------------- #
     def login(self):
@@ -153,10 +155,10 @@ class TestNegativeFlow(BaseTest):
 
 # ---------------- main ---------------------------------------------------- #
 if __name__ == "__main__":
-    unittest.main(verbosity=2, exit=False)
+    program = unittest.main(verbosity=2, exit=False)
 
     try:
-        import imageio
+        import imageio.v2 as imageio
 
         if len(CURRENT_SHOTS) >= 2:
             frames = [imageio.imread(p) for p in CURRENT_SHOTS]
@@ -166,13 +168,19 @@ if __name__ == "__main__":
                 duration=2500,  # seconds per frame
                 loop=0         # infinite loop
             )
-            print(f"[✓] demo.gif created from {len(frames)} frames (looping)")
+            print(f"[PASS] demo.gif created from {len(frames)} frames (looping)")
         else:
             print("[!] Not enough screenshots – GIF skipped")
     except Exception as e:
         print(f"[!] GIF build failed – {e}")
-    import shutil
-    for p in CURRENT_SHOTS:
-        try: p.unlink()
-        except FileNotFoundError:
-            pass
+
+    # Retain CI screenshots as downloadable workflow artifacts. Local runs keep
+    # the generated GIF and remove the intermediate PNGs.
+    if not os.getenv("CI"):
+        for p in CURRENT_SHOTS:
+            try:
+                p.unlink()
+            except FileNotFoundError:
+                pass
+
+    raise SystemExit(0 if program.result.wasSuccessful() else 1)
