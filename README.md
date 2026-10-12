@@ -27,7 +27,7 @@ and basic accessibility requirements into repeatable browser tests against the p
 | Positive checkout | Sign in, add two items, provide checkout details, finish | Order-completion heading appears |
 | Missing first name | Sign in, add one item, omit the first name | Validation banner mentions the missing first name |
 | Locked account | Attempt sign-in with the sandbox's locked user | Authentication error identifies the lockout |
-| Accessibility smoke | Inspect login and inventory pages | Login basics pass; the known empty-cart accessible-name gap is surfaced |
+| Accessibility smoke | Inspect login and inventory pages | Login basics pass; inventory allows zero issues or the single known unnamed empty-cart link, and rejects other issues |
 
 ## Demo
 
@@ -78,6 +78,16 @@ Labs project. The accessibility assertions are deliberately narrow smoke
 checks, not a replacement for automated rules engines, assistive-technology
 testing, or human review. It depends on a public third-party sandbox, so upstream UI or account
 changes can break selectors or credentials without a change to this repository.
+
+## AI assistance
+
+This repository includes work prepared with AI assistance, including
+documentation and maintenance contributions.
+
+The maintainer, soin8293, is responsible for project decisions and for reviewing
+and validating contributions. AI assistance does not establish correctness,
+security, or production readiness; consult the documented checks and
+limitations. Existing licenses and upstream credits remain applicable.
 
 ## Author
 
