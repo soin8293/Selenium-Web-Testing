@@ -98,6 +98,7 @@ class CartPage(BasePage):
 class CheckoutPage(BasePage):
     def wait_until_loaded(self):
         self.wait.until(EC.url_contains("checkout-step-one"))
+        self.wait.until(EC.visibility_of_element_located((By.ID, "first-name")))
         return self
 
     def enter_customer(self, first: str = "", last: str = "", postal: str = ""):
