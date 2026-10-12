@@ -90,8 +90,12 @@ class TestAccessibilitySmoke(BaseTest):
         login.login()
         inventory = InventoryPage(self.driver, self.wait).wait_until_loaded()
         issues = inventory.accessibility_smoke_issues()
-        self.assertEqual(len(issues), 1)
-        self.assertIn("shopping_cart_link", issues[0])
+        known_gap = "interactive element has no accessible name: <a"
+        unexpected = [issue for issue in issues if not (
+            issue.startswith(known_gap) and 'class="shopping_cart_link"' in issue
+        )]
+        self.assertEqual(unexpected, [], f"New accessibility smoke issues: {unexpected}")
+        self.assertLessEqual(len(issues), 1, "Only the single known empty-cart link is allowed")
 
 
 if __name__ == "__main__":
